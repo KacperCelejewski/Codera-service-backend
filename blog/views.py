@@ -22,3 +22,29 @@ def create_post(request):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=400)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated, IsInPostCreatorGroup])
+def delete_post(request, pk):
+    post = Post.objects.get(pk=pk)
+    post.delete()
+    return Response(status=204)
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated, IsInPostCreatorGroup])
+def update_post(request, pk):
+    post = Post.objects.get(pk=pk)
+    serializer = PostSerializer(instance=post, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["GET"])
+def get_post(request, pk):
+    post = Post.objects.get(pk=pk)
+    serializer = PostSerializer(post)
+    return Response(serializer.data)
