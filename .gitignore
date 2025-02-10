@@ -1,1 +1,37 @@
-env
+# Python bytecode
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Django
+db.sqlite3
+/static/
+media/
+
+# Poetry
+*.toml
+
+# PyCharm
+.idea/
+
+# VSCode
+.vscode/
+
+# Logs
+*.log
+
+# Test output
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# mypy
+.mypy_cache/
+.dmypy.json
