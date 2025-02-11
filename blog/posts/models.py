@@ -6,7 +6,7 @@ import abc
 
 class SlugModel(models.Model):
     title = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField()
 
     class Meta:
         abstract = True
@@ -16,7 +16,7 @@ class SlugModel(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = slugify(self.title) or None
 
         super().save(*args, **kwargs)
 
@@ -50,6 +50,7 @@ class Post(SlugModel):
     tags = models.ManyToManyField(Tag, related_name="posts", blank=True)
     published = models.BooleanField(default=False)
     objects = PostManager()
+    comments = models.ManyToOneRel(to="Comment", field_name="posts", field="id")
 
     class Meta:
         ordering = ["-created_at"]

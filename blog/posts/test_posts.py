@@ -69,35 +69,47 @@ class TestPost(TestCase):
 
     def test_created_at(self):
         user = User.objects.create_user(username="testuser", password="testpassword")
-        post = Post.objects.create(content="Test Content", author=user)
+        post = Post.objects.create(
+            title="Test title",
+            content="Test Content",
+            author=user,
+        )
         self.assertTrue(post.created_at <= timezone.now())
 
     def test_updated_at(self):
         user = User.objects.create_user(username="testuser", password="testpassword")
-        post = Post.objects.create(content="Test Content", author=user)
+        post = Post.objects.create(
+            title="Test title", content="Test Content", author=user
+        )
         self.assertTrue(post.updated_at <= timezone.now())
 
     def test_author(self):
         user = User.objects.create_user(username="testuser", password="testpassword")
-        post = Post.objects.create(content="Test Content", author=user)
+        post = Post.objects.create(
+            title="Test title", content="Test Content", author=user
+        )
         self.assertEqual(post.author, user)
 
     def test_category(self):
         category = Category.objects.create(title="Test Category")
         user = User.objects.create_user(username="testuser", password="testpassword")
         post = Post.objects.create(
-            content="Test Content", author=user, category=category
+            title="Test title", content="Test Content", author=user, category=category
         )
         self.assertEqual(post.category, category)
 
     def test_tags(self):
         tag = Tag.objects.create(title="Test Tag")
         user = User.objects.create_user(username="testuser", password="testpassword")
-        post = Post.objects.create(content="Test Content", author=user)
+        post = Post.objects.create(
+            title="Test title", content="Test Content", author=user
+        )
         post.tags.add(tag)
         self.assertIn(tag, post.tags.all())
 
     def test_published(self):
         user = User.objects.create_user(username="testuser", password="testpassword")
-        post = Post.objects.create(content="Test Content", author=user, published=True)
+        post = Post.objects.create(
+            title="Test title", content="Test Content", author=user, published=True
+        )
         self.assertTrue(post.published)

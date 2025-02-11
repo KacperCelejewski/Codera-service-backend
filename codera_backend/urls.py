@@ -17,10 +17,11 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from blog.posts.views import get_posts
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("blog/", include("blog.posts.urls")),
+    path("blog/comments/", include("blog.comments.urls")),
     path("auth/", include("auth.urls")),
 ]
