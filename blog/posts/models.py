@@ -12,11 +12,11 @@ class SlugModel(models.Model):
         abstract = True
 
     def __str__(self):
-        return self.name
+        return self.title
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = slugify(self.title)
 
         super().save(*args, **kwargs)
 
@@ -25,19 +25,13 @@ class Category(SlugModel):
 
     class Meta:
         verbose_name_plural = "categories"
-        ordering = ["name"]
-
-    def __str__(self):
-        return self.name
+        ordering = ["title"]
 
 
 class Tag(SlugModel):
 
     class Meta:
-        ordering = ["name"]
-
-    def __str__(self):
-        return self.name
+        ordering = ["title"]
 
 
 class PostManager(models.Manager):
@@ -45,7 +39,7 @@ class PostManager(models.Manager):
         return self.get_queryset().filter(published=True)
 
 
-class Post(models.Model):
+class Post(SlugModel):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -59,6 +53,3 @@ class Post(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
-
-    def __str__(self):
-        return self.title
