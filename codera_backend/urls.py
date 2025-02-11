@@ -22,4 +22,5 @@ from blog.posts.views import get_posts
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("blog/", include("blog.posts.urls")),
+    path("auth/", include("auth.urls")),
 ]

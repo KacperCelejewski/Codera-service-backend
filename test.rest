@@ -1,14 +1,18 @@
-POST http://127.0.0.1:8080/login
-Content-Type: application/json
-{
-  "username": "admin",
-  "password": "admin"
-}
+# POST http://127.0.0.1:8080/auth/login/
+# Content-Type: application/json
+# {
+#   "username": "admin",
+#   "password": "admin"
+# }
 
-POST http://127.0.0.1:8080/signup
-Content-Type: application/json
-{
-  "username": "admin",
-  "password": "admin",
-    "email": "kacper@gmail.com"
-}
+# POST http://127.0.0.1:8080/auth/register/
+# Content-Type: application/json
+
+# {
+#   "username": "admin",
+#   "password": "admin",
+#     "email": "kacper@gmail.com"
+# }
+
+POST http://127.0.0.1:8080/auth/logout/
+Authorization: Token 38953afa5e3752a09a6d0202b92b8e2aecae67d9
