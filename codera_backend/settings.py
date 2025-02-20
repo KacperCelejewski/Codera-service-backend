@@ -15,6 +15,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+ROOT_URLCONF = "codera_backend.urls"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -31,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "corsheaders",  # ✅ Move corsheaders to the top
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -40,9 +42,13 @@ INSTALLED_APPS = [
     "blog",
     "rest_framework",
     "rest_framework.authtoken",
+    "courses",
 ]
+from corsheaders.defaults import default_headers
 
+CORS_ALLOW_HEADERS = default_headers + ("Access-Control-Allow-Origin",)
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",  # ✅ Keep only one instance
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -51,19 +57,20 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
 REST_FRAMEWORK = {
-    # Only for moderators
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
-        "rest_framework.permissions.IsAdminUser",
-    ],
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.permissions.AllowAny",  # ✅ Allow public access
     ],
 }
 
-ROOT_URLCONF = "codera_backend.urls"
-
+CSRF_TRUSTED_ORIGINS = ["http://localhost:5173"]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5174",  # ✅ Allow frontend access
+]
+CORS_ALLOW_ALL_ORIGINS = False  # ✅ Remove conflict
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
