@@ -25,3 +25,10 @@ def create_comment(request):
 
     comment = Comment.objects.create(user=user, post=post, content=content)
     return Response(CommentSerializer(comment).data, status=status.HTTP_201_CREATED)
+
+
+@permission_classes([IsAuthenticated])
+@api_view(["GET"])
+def comments(request):
+    comments = Comment.objects.all()
+    return Response(CommentSerializer(comments, many=True).data)

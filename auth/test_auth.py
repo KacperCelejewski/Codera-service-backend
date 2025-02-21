@@ -71,9 +71,7 @@ class TestAuthAPI:
 
         assert response.status_code == status.HTTP_200_OK
         assert response.data["message"] == "Logged out"
-        assert not Token.objects.filter(
-            user=user
-        ).exists()  # Sprawdza, czy token został usunięty
+        assert not Token.objects.filter(user=user).exists()  #
 
     def test_logout_without_authentication(self):
         """Test logging out without authentication"""

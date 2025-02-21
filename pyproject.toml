@@ -53,7 +53,8 @@ dependencies = [
     "trove-classifiers (==2025.1.15.22)",
     "tzdata (==2025.1)",
     "urllib3 (==2.3.0)",
-    "virtualenv (==20.29.1)"
+    "virtualenv (==20.29.1)",
+    "django-cors-headers (>=4.7.0,<5.0.0)"
 ]
 
 
