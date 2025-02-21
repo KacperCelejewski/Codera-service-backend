@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-6r9h#$piejl#@xf6q(+b&@#%ve8a^^j&y6!bdpe&e)a^a-1998
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -46,9 +46,10 @@ INSTALLED_APPS = [
 ]
 from corsheaders.defaults import default_headers
 
-CORS_ALLOW_HEADERS = default_headers + ("Access-Control-Allow-Origin",)
+
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # ✅ Keep only one instance
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -60,13 +61,13 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",  # ✅ Allow public access
+        "rest_framework.permissions.AllowAny",
     ],
 }
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:5173"]
+
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5174",  # ✅ Allow frontend access
+    "http://localhost:5173",  #
 ]
 CORS_ALLOW_ALL_ORIGINS = False  # ✅ Remove conflict
 CORS_ALLOW_CREDENTIALS = True
