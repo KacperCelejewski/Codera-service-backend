@@ -28,12 +28,12 @@ ROOT_URLCONF = "codera_backend.urls"
 # SECURITY WARNING: keep the secret key used in production secret!
 
 
-SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-test-key")
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "jwt-secret-test-key")
 
 # Application definition
 
