@@ -51,6 +51,7 @@ class Post(SlugModel):
     published = models.BooleanField(default=False)
     objects = PostManager()
     comments = models.ManyToOneRel(to="Comment", field_name="posts", field="id")
+    excerpt = models.TextField(blank=True)
 
     class Meta:
         ordering = ["-created_at"]

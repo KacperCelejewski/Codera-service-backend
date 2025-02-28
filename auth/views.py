@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from .serializers import RegisterSerializer
+from rest_framework.authtoken.views import ObtainAuthToken
 
 
 class RegisterView(CreateAPIView):
@@ -21,7 +22,7 @@ class RegisterView(CreateAPIView):
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
         user = User.objects.get(username=response.data["username"])
-        token, created = Token.objects.get_or_create(user=user)
+        token = Token.objects.get_or_create(user=user)
         return Response({"token": token.key}, status=status.HTTP_201_CREATED)
 
 
@@ -38,4 +39,9 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_200_OK, data={"message": "Logged out"})
 
 
-# Compare this snippet from auth/urls.py:
+class CustomAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        token = Token.objects.get(key=response.data["token"])
+        user = token.user
+        return Response({"token": token.key, "username": user.username, "uid": user.id})

@@ -37,13 +37,21 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework_simplejwt",
     "blog",
     "rest_framework",
-    "rest_framework.authtoken",
     "courses",
 ]
-from corsheaders.defaults import default_headers
+from datetime import timedelta
 
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),  # Token valid for 1 hour
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),  # Refresh token valid for 7 days
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "SIGNING_KEY": "your-secret-key",  # Use `SECRET_KEY` or an environment variable
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -57,20 +65,18 @@ MIDDLEWARE = [
 ]
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
-    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",
-        "rest_framework.permissions.IsAuthenticated",
-        "rest_framework.permissions.IsAdminUser",
     ],
 }
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 CORS_ALLOWED_ORIGINS = [
-    "https://localhost",
+    "http://localhost:5173",
 ]
+CORS_ALLOW_CREDENTIALS = True
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
