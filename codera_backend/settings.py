@@ -10,7 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,16 +26,19 @@ ROOT_URLCONF = "codera_backend.urls"
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-6r9h#$piejl#@xf6q(+b&@#%ve8a^^j&y6!bdpe&e)a^a-1998"
+
+
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 
 # Application definition
 
 INSTALLED_APPS = [
-    "corsheaders",  # ✅ Move corsheaders to the top
+    "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -41,15 +49,16 @@ INSTALLED_APPS = [
     "blog",
     "rest_framework",
     "courses",
+    "rest_framework_simplejwt.token_blacklist",
 ]
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),  # Token valid for 1 hour
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),  # Refresh token valid for 7 days
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
-    "SIGNING_KEY": "your-secret-key",  # Use `SECRET_KEY` or an environment variable
+    "SIGNING_KEY": os.getenv("JWT_SECRET_KEY"),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
