@@ -11,7 +11,11 @@ from blog.permissions import IsInPostCreatorGroup
 def get_posts(request):
     serializer = PostSerializer(Post.objects.all(), many=True)
     posts = serializer.data
-    return Response(posts)
+    # 404 error if no posts
+    if len(posts) == 0:
+        return Response(status=404, data={"message": "No posts found"})
+
+    return Response(data={"posts": posts, "message": "Posts found"})
 
 
 @api_view(["POST"])
@@ -44,7 +48,8 @@ def update_post(request, pk):
 
 
 @api_view(["GET"])
-def get_post(request, pk):
-    post = Post.objects.get(pk=pk)
+def get_post(request, slug):
+    print(slug)
+    post = Post.objects.get(slug=slug)
     serializer = PostSerializer(post)
     return Response(serializer.data)

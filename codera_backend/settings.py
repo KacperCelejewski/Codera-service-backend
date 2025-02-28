@@ -10,7 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,29 +26,41 @@ ROOT_URLCONF = "codera_backend.urls"
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-6r9h#$piejl#@xf6q(+b&@#%ve8a^^j&y6!bdpe&e)a^a-1998"
+
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-test-key")
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "jwt-secret-test-key")
 
 # Application definition
 
 INSTALLED_APPS = [
-    "corsheaders",  # ✅ Move corsheaders to the top
+    "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework_simplejwt",
     "blog",
     "rest_framework",
-    "rest_framework.authtoken",
     "courses",
+    "rest_framework_simplejwt.token_blacklist",
 ]
-from corsheaders.defaults import default_headers
+from datetime import timedelta
 
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "SIGNING_KEY": os.getenv("JWT_SECRET_KEY"),
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -57,20 +74,18 @@ MIDDLEWARE = [
 ]
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
-    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",
-        "rest_framework.permissions.IsAuthenticated",
-        "rest_framework.permissions.IsAdminUser",
     ],
 }
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 CORS_ALLOWED_ORIGINS = [
-    "https://localhost",
+    "http://localhost:5173",
 ]
+CORS_ALLOW_CREDENTIALS = True
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
